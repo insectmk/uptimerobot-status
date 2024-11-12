@@ -1,4 +1,3 @@
-import './assets/main.css'
 import './assets/styles.scss'
 import '@popperjs/core'
 import 'bootstrap'
