@@ -1,7 +1,4 @@
 import './assets/styles.scss'
-import '@popperjs/core'
-import 'bootstrap'
-
 
 import { createApp } from 'vue'
 import { createPinia } from 'pinia'
