@@ -2,6 +2,24 @@ import type { Log, Status, StatusRangeInfo } from '@/common/type'
 import config from '@/common/config'
 
 /**
+ * 处理时间戳为yyyy-MM-dd格式的内容
+ * @param timestamp 时间戳
+ */
+export const formatTimestamp = (timestamp: number): string => {
+  const date = new Date(timestamp)
+  const formatter = new Intl.DateTimeFormat('default', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit'
+  });
+  const parts = formatter.formatToParts(date)
+  const year = parts.find(part => part.type === 'year')!.value
+  const month = parts.find(part => part.type === 'month')!.value
+  const day = parts.find(part => part.type === 'day')!.value
+  return `${year}-${month}-${day}`
+}
+
+/**
  * 获取网站的详细日志内容
  * @param uptimeRanges uptime响应的custom_uptime_ranges字段值
  * @param logs uptime响应的logs字段值
