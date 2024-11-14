@@ -1,4 +1,71 @@
-import type { Status } from '@/common/type'
+import type { Log, Status, StatusRangeInfo } from '@/common/type'
+import config from '@/common/config'
+
+/**
+ * 获取网站的详细日志内容
+ * @param uptimeRanges uptime响应的custom_uptime_ranges字段值
+ * @param logs uptime响应的logs字段值
+ */
+export const getStatusRangeInfos = (uptimeRanges: string, logs: Log[]): StatusRangeInfo[] => {
+  const result : StatusRangeInfo[] = []
+  const countDays = config.CountDays
+  const uptimeRangesArr: string[] = uptimeRanges.split('-') // 分割可用率
+  // 获取当前日期
+  const now = new Date()
+  // 设置时间为今天的0点
+  now.setHours(0, 0, 0, 0)
+  // 分析字符串
+  for (let i = 0; i < countDays; i++) {
+    const uptime: number = parseFloat(parseFloat(uptimeRangesArr[i]).toFixed(2)) //获取可用率
+    const dayLogs = logs.filter(log => log.datetime >= startDate && log.datetime <= endDate) // 故障计数
+    // 计算每天的开始时间戳（0点）
+    const startDate = now.getTime() - i * 24 * 60 * 60 * 1000
+    // 计算每天结束时间戳（下一天的0点）
+    const endDate = startDate + 24 * 60 * 60 * 1000
+    result.push({
+      status: {
+        status: uptime >= 100 ? 'ok' : (uptime <= 0 && dayLogs.length === 0 ? 'none' : 'down'),
+        statusText: '测试测试'
+      },
+      startDate,
+      endDate,
+      uptime,
+      downTimes: dayLogs.length,// 故障次数
+      downDuration: dayLogs.reduce((accumulator, current) => {
+        return accumulator + current.duration
+      }, 0) // 故障时间总和，初始为0
+    } as StatusRangeInfo)
+  }
+  return result
+}
+
+/**
+ * 根据用户时间范围生产uptime robot需要的参数格式
+ * 时间戳范围；_表示范围，-表示分割
+ */
+export const getCustomUptimeRangesStr = (): string => {
+  const countDays = config.CountDays
+  const ranges = []
+
+  // 获取当前日期
+  const now = new Date()
+  // 设置时间为今天的0点
+  now.setHours(0, 0, 0, 0)
+
+  // 循环生成过去 countDays 天每一天的时间范围
+  for (let i = 0; i < countDays; i++) {
+    // 计算每天的开始时间戳（0点）
+    const dayStart = now.getTime() - i * 24 * 60 * 60 * 1000
+    // 计算每天结束时间戳（下一天的0点）
+    const dayEnd = dayStart + 24 * 60 * 60 * 1000
+    // 将时间戳转换为秒并添加到数组
+    ranges.push(`${Math.floor(dayStart / 1000)}_${Math.floor(dayEnd / 1000)}`)
+  }
+
+  // 将所有时间范围用 '-' 连接起来
+  return ranges.join('-')
+}
+
 
 /**
  * 根据状态码获取状态
