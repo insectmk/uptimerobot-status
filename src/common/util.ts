@@ -34,24 +34,35 @@ export const getStatusRangeInfos = (uptimeRanges: string, logs: Log[]): StatusRa
   now.setHours(0, 0, 0, 0)
   // 分析字符串
   for (let i = 0; i < countDays; i++) {
-    const uptime: number = parseFloat(parseFloat(uptimeRangesArr[i]).toFixed(2)) //获取可用率
-    const dayLogs = logs.filter(log => log.datetime >= startDate && log.datetime <= endDate) // 故障计数
     // 计算每天的开始时间戳（0点）
     const startDate = now.getTime() - i * 24 * 60 * 60 * 1000
     // 计算每天结束时间戳（下一天的0点）
     const endDate = startDate + 24 * 60 * 60 * 1000
+    const uptime: number = parseFloat(parseFloat(uptimeRangesArr[i]).toFixed(2)) //获取可用率
+    const dayLogs = logs.filter(log => log.datetime >= startDate && log.datetime <= endDate) // 故障计数
+    const downDuration = dayLogs.reduce((accumulator, current) => {
+      return accumulator + current.duration
+    }, 0) // 故障持续时间
+    // 创建当日状态消息
+    const status: Status = {} as Status
+    if (uptime >= 100) {
+      status.status = 'ok'
+      status.statusText = `可用率 ${ uptime }%`
+    } else if (uptime <= 0 && dayLogs.length === 0) {
+      status.status = 'none'
+      status.statusText = `无数据`
+    } else {
+      status.status = 'down'
+      status.statusText = `故障 ${ dayLogs.length } 次，累计 ${ downDuration }，可用率 ${ uptime }%`
+    }
+    // 装载信息
     result.push({
-      status: {
-        status: uptime >= 100 ? 'ok' : (uptime <= 0 && dayLogs.length === 0 ? 'none' : 'down'),
-        statusText: '测试测试'
-      },
+      status,
       startDate,
       endDate,
       uptime,
       downTimes: dayLogs.length,// 故障次数
-      downDuration: dayLogs.reduce((accumulator, current) => {
-        return accumulator + current.duration
-      }, 0) // 故障时间总和，初始为0
+      downDuration,  // 故障时间总和，初始为0
     } as StatusRangeInfo)
   }
   return result
