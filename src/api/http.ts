@@ -7,7 +7,7 @@ import type { AxiosResponse } from 'axios'
  * @param parameter 请求参数
  * @return Axios对象
  */
-export const getAction = (url: string, parameter?: object): Promise<AxiosResponse<object>> => {
+export const getAction = <T> (url: string, parameter?: object): Promise<AxiosResponse<T>> => {
   return axiosInstance({
     url: url,
     method: 'get',
@@ -21,7 +21,7 @@ export const getAction = (url: string, parameter?: object): Promise<AxiosRespons
  * @param data 请求参数
  * @return Axios对象
  */
-export const postAction = (url: string, data?: object): Promise<AxiosResponse<object>> => {
+export const postAction = <T> (url: string, data?: object): Promise<AxiosResponse<T>> => {
   return axiosInstance({
     url: url,
     method: 'post',
