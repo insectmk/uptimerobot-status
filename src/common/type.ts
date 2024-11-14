@@ -26,7 +26,8 @@ export interface Monitor {
   friendly_name: string
   url: string
   status: number,
-  logs: Log
+  custom_uptime_ranges: string,
+  logs: Log[]
 }
 export interface Log {
   id: number
@@ -49,6 +50,7 @@ export interface Status {
  * 网站日期范围详细信息
  */
 export interface StatusRangeInfo {
+  status: Status, // 状态
   startDate: number
   endDate: number
   uptime: number // 可用率
