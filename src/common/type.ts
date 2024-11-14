@@ -1,6 +1,7 @@
 /**
- * Ajax返回结果集
+ * UptimeRobot API 接口参数
+ * https://uptimerobot.com/api/
  */
-export interface Config {
-  ApiKeys: string
+export interface UptimeRobotApiParams {
+  api_key: string, // API密钥
 }
