@@ -2,7 +2,7 @@
   <div v-for="webInfo in webInfos" :key="webInfo.id" class='site'>
     <div class='meta'>
       <span class='name'>{{ webInfo.friendly_name }}</span>
-      <link-component class="link" :to="webInfo.url" :text="webInfo.friendly_name" />
+      <link-component v-if="config.ShowLink" class="link" :to="webInfo.url" :text="webInfo.friendly_name" />
       <span :class="`status ${ webInfo.statusInfo.status }`">{{ webInfo.statusInfo.statusText }}</span>
     </div>
     <div class='timeline'>
@@ -32,6 +32,7 @@ import { onMounted, ref } from 'vue'
 import LinkComponent from '@/components/LinkComponent.vue'
 import type { WebInfo } from '@/serivice/type/type.ts'
 import { formatTimestamp, getWebInfosByKey } from '@/serivice/service.ts'
+import config from '@/common/config.ts'
 
 const props = defineProps([ // 定义组件参数
   'apiKey',

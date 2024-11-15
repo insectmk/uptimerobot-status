@@ -22,7 +22,7 @@ export default {
   CountDays: 90,
 
   // 是否显示检测站点的链接
-  ShowLink: true,
+  ShowLink: false,
 
   // 是否正序显示状态，旧数据->新数据
   OldToNew: true,
