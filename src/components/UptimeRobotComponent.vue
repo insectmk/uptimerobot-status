@@ -16,9 +16,13 @@
       </el-tooltip>
     </div>
     <div class='summary'>
-      <span>{{ formatTimestamp(getStatusRangeInfos(site.custom_uptime_ranges, site.logs).slice(-1)[0].startDate) }}</span>
+      <span>
+        {{ getDateOrTody(getStatusRangeInfos(site.custom_uptime_ranges, site.logs)[0].startDate) }}
+      </span>
       <span>最近 {{ config.CountDays }} 天可用率 {{ getStatusRangeInfos(site.custom_uptime_ranges, site.logs).reduce((acc, info) => acc + info.uptime, 0) / getStatusRangeInfos(site.custom_uptime_ranges, site.logs).length }}% </span>
-      <span>今天</span>
+      <span>
+        {{ getDateOrTody(getStatusRangeInfos(site.custom_uptime_ranges, site.logs).slice(-1)[0].startDate) }}
+      </span>
     </div>
   </div>
 </template>
@@ -37,6 +41,21 @@ const props = defineProps([ // 定义组件参数
 
 // 双向绑定
 const monitors = ref<Monitor[]>([])
+
+/**
+ * 获取日期，今天转为今天，其他转为yyyy-MM-dd字符串
+ * @param datetime 时间戳
+ */
+const getDateOrTody = (datetime: number): string => {
+  const date = new Date(datetime)
+  date.setHours(0, 0, 0, 0)
+  const now = new Date()
+  now.setHours(0, 0, 0, 0)
+  if (date.getTime() === now.getTime()) {
+    return '今天'
+  }
+  return formatTimestamp(date.getTime())
+}
 
 onMounted(() => {
   // 根据API获取网站状态

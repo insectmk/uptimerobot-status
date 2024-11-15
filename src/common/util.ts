@@ -65,6 +65,10 @@ export const getStatusRangeInfos = (uptimeRanges: string, logs: Log[]): StatusRa
       downDuration,  // 故障时间总和，初始为0
     } as StatusRangeInfo)
   }
+  // 是否正序
+  if (config.OldToNew) {
+    result.reverse()
+  }
   return result
 }
 
