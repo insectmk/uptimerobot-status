@@ -9,6 +9,13 @@ import { ElementPlusResolver } from 'unplugin-vue-components/resolvers'
 
 // https://vite.dev/config/
 export default defineConfig({
+  css: {
+    preprocessorOptions: {
+      scss: {// scss处理器
+        api: 'modern-compiler'
+      }
+    }
+  },
   plugins: [
     vue(),
     vueDevTools(),
