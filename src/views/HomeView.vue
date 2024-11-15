@@ -6,11 +6,8 @@
     </div>
     <div id="footer">
       <p>
-        参照 <link-component to="https://github.com/yb/uptime-status" text="Uptime-Status" /> 更改
-      </p>
-      <p>
-        基于 <link-component to="https://uptimerobot.com/" text="UptimeRobot" /> 接口制作，检测频率
-        5 分钟
+        参照 <link-component to="https://github.com/yb/uptime-status" text="Uptime-Status" /> 更改，
+        基于 <link-component to="https://uptimerobot.com/" text="UptimeRobot" /> 接口制作
       </p>
       <p>
         &copy; 2024 <link-component to="https://github.com/insectmk/uptimerobot-status" text="UptimeRobot-Status" />, Version
