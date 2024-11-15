@@ -23,4 +23,7 @@ import UptimeRobotComponent from '@/components/UptimeRobotComponent.vue'
 import LinkComponent from '@/components/LinkComponent.vue'
 import config from '@/common/config'
 import Package from '../../package.json'
+
+// 设置网站title
+document.title = config.SiteName
 </script>
