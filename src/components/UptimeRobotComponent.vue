@@ -17,18 +17,18 @@
     </div>
     <div class='summary'>
       <span>
-        {{ getDateOrTody(getStatusRangeInfos(site.custom_uptime_ranges, site.logs)[0].startDate) }}
+        {{ getDateOrToday(getStatusRangeInfos(site.custom_uptime_ranges, site.logs)[0].startDate) }}
       </span>
       <span>最近 {{ config.CountDays }} 天可用率 {{ (getStatusRangeInfos(site.custom_uptime_ranges, site.logs).reduce((acc, info) => acc + info.uptime, 0) / getStatusRangeInfos(site.custom_uptime_ranges, site.logs).length).toFixed(2) }}% </span>
       <span>
-        {{ getDateOrTody(getStatusRangeInfos(site.custom_uptime_ranges, site.logs).slice(-1)[0].startDate) }}
+        {{ getDateOrToday(getStatusRangeInfos(site.custom_uptime_ranges, site.logs).slice(-1)[0].startDate) }}
       </span>
     </div>
   </div>
 </template>
 
 <script lang="ts" setup>
-import { defineProps, onMounted, ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { getMonitors } from '@/api/uptimeRobot'
 import LinkComponent from '@/components/LinkComponent.vue'
 import type { Monitor, UptimeRobotApiParams } from '@/common/type'
@@ -46,7 +46,7 @@ const monitors = ref<Monitor[]>([])
  * 获取日期，今天转为今天，其他转为yyyy-MM-dd字符串
  * @param datetime 时间戳
  */
-const getDateOrTody = (datetime: number): string => {
+const getDateOrToday = (datetime: number): string => {
   const date = new Date(datetime)
   date.setHours(0, 0, 0, 0)
   const now = new Date()
