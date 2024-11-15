@@ -2,7 +2,7 @@ import { postAction } from '@/api/http'
 import type { UptimeRobotApiParams, UptimeRobotApiResponse } from '@/common/type'
 import config from '@/common/config'
 import type { AxiosResponse } from 'axios'
-import { getCustomUptimeRangesStr } from '@/common/util'
+import { getCustomUptimeRangesStr } from '@/common/service'
 
 /**
  * 监控内容数据

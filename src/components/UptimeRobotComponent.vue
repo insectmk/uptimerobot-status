@@ -31,7 +31,7 @@
 import { onMounted, ref } from 'vue'
 import LinkComponent from '@/components/LinkComponent.vue'
 import type { WebInfo } from '@/common/type'
-import { formatTimestamp, getWebInfosByKey } from '@/common/util'
+import { formatTimestamp, getWebInfosByKey } from '@/common/service'
 import config from '../common/config'
 
 const props = defineProps([ // 定义组件参数
