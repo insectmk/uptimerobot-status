@@ -3,6 +3,28 @@ import config from '@/common/config'
 import { getMonitors } from '@/api/uptimeRobot.ts'
 
 /**
+ * 将秒转为文本
+ * @param seconds 秒数
+ */
+export const formatDuration = (seconds: number): string => {
+  let s = seconds
+  let m = 0
+  let h = 0
+  if (s >= 60) {
+    m = Math.floor(s / 60)
+    s =  Math.floor(s % 60)
+    if (m >= 60) {
+      h = Math.floor(m / 60)
+      m =  Math.floor(m % 60)
+    }
+  }
+  let text = `${s} 秒`
+  if (m > 0) text = `${m} 分 ${text}`
+  if (h > 0) text = `${h} 小时 ${text}`
+  return text
+}
+
+/**
  * 根据API key获取网站监控信息
  * @param key
  */
@@ -14,13 +36,14 @@ export const getWebInfosByKey = async (key: string): Promise<WebInfo[]> => {
   const webInfos = [] as WebInfo[] // 返回结果（封装后的网站监控信息）
   monitors.forEach((monitor) => {
     const statusRangeInfos = getStatusRangeInfos(monitor.custom_uptime_ranges, monitor.logs)
+    console.log((statusRangeInfos.reduce((acc, info) => acc + info.uptime, 0)/90), monitor.friendly_name)
     webInfos.push({ // 装载封装数据
       ...monitor, // 复制官方数据
       statusRangeInfos, // 网站时间线信息
       statusInfo: getStatus(monitor.status), // 网站当前状态信息,
       startTime: statusRangeInfos[0].startDate, // 监控开始天时间戳
       endTime: statusRangeInfos.slice(-1)[0].startDate, // 监控结束天时间戳
-      avgUptime: parseFloat((statusRangeInfos.reduce((acc, info) => acc + info.uptime, 0) / statusRangeInfos.length).toFixed(2))
+      avgUptime: parseFloat((statusRangeInfos.reduce((acc, info) => acc + info.uptime, 0) / statusRangeInfos.length).toFixed(3).slice(0, -1))
     } as WebInfo)
   })
   return webInfos
@@ -64,7 +87,9 @@ export const getStatusRangeInfos = (uptimeRanges: string, logs: Log[]): StatusRa
     // 计算每天结束时间戳（下一天的0点）
     const endDate = startDate + 24 * 60 * 60 * 1000
     const uptime: number = parseFloat(parseFloat(uptimeRangesArr[i]).toFixed(2)) //获取可用率
-    const dayLogs = logs.filter(log => log.datetime >= startDate && log.datetime <= endDate) // 故障计数
+    const dayLogs = logs.filter(log => (log.datetime * 1000) >= startDate
+      && (log.datetime * 1000) <= endDate
+      && log.reason.code != '200') // 故障计数
     const downDuration = dayLogs.reduce((accumulator, current) => {
       return accumulator + current.duration
     }, 0) // 故障持续时间
@@ -78,7 +103,7 @@ export const getStatusRangeInfos = (uptimeRanges: string, logs: Log[]): StatusRa
       status.statusText = `${ formatTimestamp(startDate) } 无数据`
     } else {
       status.status = 'down'
-      status.statusText = `${ formatTimestamp(startDate) } 故障 ${ dayLogs.length } 次，累计 ${ downDuration }，可用率 ${ uptime }%`
+      status.statusText = `${ formatTimestamp(startDate) } 故障 ${ dayLogs.length } 次，累计 ${ formatDuration(downDuration) }，可用率 ${ uptime }%`
     }
     // 装载信息
     result.push({

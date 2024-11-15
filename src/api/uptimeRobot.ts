@@ -17,8 +17,8 @@ export const getMonitors = (params: UptimeRobotApiParams) : Promise<AxiosRespons
     format: 'json',
     log_types: '1-2',
     logs: 1,
-    logs_start_date: now.getTime() - config.CountDays * 24 * 60 * 60 * 1000, // 日志开始时间
-    logs_end_date: now.getTime() + 24 * 60 * 60 * 1000 // 日志结束时间
+    logs_start_date: (now.getTime() - config.CountDays * 24 * 60 * 60 * 1000) / 1000, // 日志开始时间（时间戳，秒为单位）
+    logs_end_date: (now.getTime() + 24 * 60 * 60 * 1000) / 1000 // 日志结束时间（时间戳，秒为单位）
   } as UptimeRobotApiParams
   return postAction(config.ApiUrl, { ...defaultParam, ...params })
 }

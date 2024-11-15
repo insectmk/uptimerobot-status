@@ -1,5 +1,3 @@
-import { getStatusRangeInfos } from '@/common/util'
-
 /**
  * UptimeRobot API 接口参数
  * https://uptimerobot.com/api/
@@ -21,7 +19,7 @@ export interface UptimeRobotApiParams {
 export interface UptimeRobotApiResponse {
   monitors: Monitor[]
 }
-export interface Monitor {
+export interface Monitor {// 网站监控内容
   id: number
   friendly_name: string
   url: string
@@ -29,12 +27,16 @@ export interface Monitor {
   custom_uptime_ranges: string,
   logs: Log[]
 }
-export interface Log {
+export interface Log {// 网站日志
   id: number
   type: number
   datetime: number
   duration: number
-  reason: object
+  reason: Reason
+}
+interface Reason {// 日志详情
+  code: string
+  detail: string
 }
 
 /**
