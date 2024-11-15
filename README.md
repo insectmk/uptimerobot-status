@@ -10,6 +10,8 @@
 
 ## 配置
 
+修改`src/common/config.ts`文件：
+
 ```typescript
 export default {
   // 显示标题
@@ -53,6 +55,6 @@ export default {
 
 ```
 
-# 相关文档
+## 相关文档
 
 [UptimeRobot接口文档](https://uptimerobot.com/api/)
