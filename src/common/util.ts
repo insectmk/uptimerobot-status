@@ -1,5 +1,30 @@
-import type { Log, Status, StatusRangeInfo } from '@/common/type'
+import type { Log, Status, StatusRangeInfo, UptimeRobotApiParams, WebInfo } from '@/common/type'
 import config from '@/common/config'
+import { getMonitors } from '@/api/uptimeRobot.ts'
+
+/**
+ * 根据API key获取网站监控信息
+ * @param key
+ */
+export const getWebInfosByKey = async (key: string): Promise<WebInfo[]> => {
+  const uptimeResp = await getMonitors({ // 获取接口元数据
+    api_key: key
+  } as UptimeRobotApiParams)
+  const monitors = uptimeResp.data.monitors // key对应的监控内容
+  const webInfos = [] as WebInfo[] // 返回结果（封装后的网站监控信息）
+  monitors.forEach((monitor) => {
+    const statusRangeInfos = getStatusRangeInfos(monitor.custom_uptime_ranges, monitor.logs)
+    webInfos.push({ // 装载封装数据
+      ...monitor, // 复制官方数据
+      statusRangeInfos, // 网站时间线信息
+      statusInfo: getStatus(monitor.status), // 网站当前状态信息,
+      startTime: statusRangeInfos[0].startDate, // 监控开始天时间戳
+      endTime: statusRangeInfos.slice(-1)[0].startDate, // 监控结束天时间戳
+      avgUptime: parseFloat((statusRangeInfos.reduce((acc, info) => acc + info.uptime, 0) / statusRangeInfos.length).toFixed(2))
+    } as WebInfo)
+  })
+  return webInfos
+}
 
 /**
  * 处理时间戳为yyyy-MM-dd格式的内容

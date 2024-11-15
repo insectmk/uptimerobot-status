@@ -57,3 +57,14 @@ export interface StatusRangeInfo {
   downTimes: number // 故障次数
   downDuration: number // 故障持续时间 s
 }
+
+/**
+ * 自定义的网站信息，包含uptime monitor内容
+ */
+export interface WebInfo extends Monitor {
+  statusRangeInfos: StatusRangeInfo[] // 时间线详情
+  statusInfo: Status // 网站状态
+  startTime: number // 监控开始天时间戳
+  endTime: number // 监控结束天时间戳
+  avgUptime: number // 平均可用率
+}
