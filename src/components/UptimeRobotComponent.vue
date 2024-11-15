@@ -19,7 +19,7 @@
       <span>
         {{ getDateOrToday(webInfo.startTime) }}
       </span>
-      <span>最近 {{ config.CountDays }} 天可用率 {{ webInfo.avgUptime }}% </span>
+      <span>{{ webInfo.analyse.toString() }}</span>
       <span>
         {{ getDateOrToday(webInfo.endTime) }}
       </span>
@@ -30,9 +30,8 @@
 <script lang="ts" setup>
 import { onMounted, ref } from 'vue'
 import LinkComponent from '@/components/LinkComponent.vue'
-import type { WebInfo } from '@/common/type'
-import { formatTimestamp, getWebInfosByKey } from '@/common/service'
-import config from '../common/config'
+import type { WebInfo } from '@/serivice/type/type.ts'
+import { formatTimestamp, getWebInfosByKey } from '@/serivice/service.ts'
 
 const props = defineProps([ // 定义组件参数
   'apiKey',

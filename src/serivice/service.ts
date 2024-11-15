@@ -1,7 +1,8 @@
-import type { Log, Status, StatusRangeInfo, UptimeRobotApiParams, WebInfo } from '@/common/type'
-import config from '@/common/config'
+import type { Log, Status, StatusRangeInfo, UptimeRobotApiParams, WebInfo } from '@/serivice/type/type.ts'
+import config from '@/common/config.ts'
 import { getMonitors } from '@/api/uptimeRobot.ts'
 import { formatDuration } from '@/common/util.ts'
+import { WebAnalyse } from '@/serivice/entity/WebAnalyse.ts'
 
 /**
  * 根据API key获取网站监控信息
@@ -15,13 +16,19 @@ export const getWebInfosByKey = async (key: string): Promise<WebInfo[]> => {
   const webInfos = [] as WebInfo[] // 返回结果（封装后的网站监控信息）
   monitors.forEach((monitor) => {
     const statusRangeInfos = getStatusRangeInfos(monitor.custom_uptime_ranges, monitor.logs)
+    // 装载分析数据
+    const analyse = new WebAnalyse(config.CountDays, // 总天数
+      statusRangeInfos.reduce((downTime, info) => downTime + info.downTimes, 0), // 故障次数
+      statusRangeInfos.reduce((downDuration, info) => downDuration + info.downDuration, 0), // 故障持续时间（s）
+      parseFloat((statusRangeInfos.reduce((acc, info) => acc + info.uptime, 0)
+      / statusRangeInfos.length).toFixed(3).slice(0, -1))) // 平均可用率
     webInfos.push({ // 装载封装数据
       ...monitor, // 复制官方数据
       statusRangeInfos, // 网站时间线信息
       statusInfo: getStatus(monitor.status), // 网站当前状态信息,
       startTime: statusRangeInfos[0].startDate, // 监控开始天时间戳
       endTime: statusRangeInfos.slice(-1)[0].startDate, // 监控结束天时间戳
-      avgUptime: parseFloat((statusRangeInfos.reduce((acc, info) => acc + info.uptime, 0) / statusRangeInfos.length).toFixed(3).slice(0, -1))
+      analyse, // 网站分析
     } as WebInfo)
   })
   return webInfos

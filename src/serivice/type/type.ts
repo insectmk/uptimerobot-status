@@ -1,3 +1,5 @@
+import type { WebAnalyse } from '@/serivice/entity/WebAnalyse.ts'
+
 /**
  * UptimeRobot API 接口参数
  * https://uptimerobot.com/api/
@@ -68,5 +70,6 @@ export interface WebInfo extends Monitor {
   statusInfo: Status // 网站状态
   startTime: number // 监控开始天时间戳
   endTime: number // 监控结束天时间戳
-  avgUptime: number // 平均可用率
+  analyse: WebAnalyse // 网站分析
 }
+

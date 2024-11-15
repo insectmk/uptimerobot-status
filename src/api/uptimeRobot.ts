@@ -1,8 +1,8 @@
 import { postAction } from '@/api/http'
-import type { UptimeRobotApiParams, UptimeRobotApiResponse } from '@/common/type'
+import type { UptimeRobotApiParams, UptimeRobotApiResponse } from '@/serivice/type/type.ts'
 import config from '@/common/config'
 import type { AxiosResponse } from 'axios'
-import { getCustomUptimeRangesStr } from '@/common/service'
+import { getCustomUptimeRangesStr } from '@/serivice/service.ts'
 
 /**
  * 监控内容数据
