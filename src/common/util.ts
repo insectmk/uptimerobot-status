@@ -47,13 +47,13 @@ export const getStatusRangeInfos = (uptimeRanges: string, logs: Log[]): StatusRa
     const status: Status = {} as Status
     if (uptime >= 100) {
       status.status = 'ok'
-      status.statusText = `可用率 ${ uptime }%`
+      status.statusText = `${ formatTimestamp(startDate) } 可用率 ${ uptime }%`
     } else if (uptime <= 0 && dayLogs.length === 0) {
       status.status = 'none'
-      status.statusText = `无数据`
+      status.statusText = `${ formatTimestamp(startDate) } 无数据`
     } else {
       status.status = 'down'
-      status.statusText = `故障 ${ dayLogs.length } 次，累计 ${ downDuration }，可用率 ${ uptime }%`
+      status.statusText = `${ formatTimestamp(startDate) } 故障 ${ dayLogs.length } 次，累计 ${ downDuration }，可用率 ${ uptime }%`
     }
     // 装载信息
     result.push({
