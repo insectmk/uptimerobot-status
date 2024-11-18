@@ -1,8 +1,13 @@
 export default {
   // 显示标题
   SiteName: 'InsectMk的在线状态',
-  // API接口地址：default：https://api.uptimerobot.com/v2/getMonitors
-  ApiUrl: 'https://cors.status.org.cn/uptimerobot/v2/getMonitors',
+  /*
+  * API接口地址：
+  * UptimeRobot官方默认（限制1分钟10次请求）：https://api.uptimerobot.com/v2/getMonitors
+  * Uptime-Status项目官方（5分钟缓存）https://cors.status.org.cn/uptimerobot/v2/getMonitors
+  * 本项目官方（5分钟缓存）https://status-api.insectmk.top/
+  * */
+  ApiUrl: 'https://status-api.insectmk.top/',
   // API缓存时间：单位：ms
   ApiCatchTime: 60000,
 
@@ -22,7 +27,7 @@ export default {
   CountDays: 90,
 
   // 是否显示检测站点的链接
-  ShowLink: false,
+  ShowLink: true,
 
   // 是否正序显示状态，旧数据->新数据
   OldToNew: true,
