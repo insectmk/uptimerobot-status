@@ -16,7 +16,6 @@ export default {
   ApiKeys: [
     'm796898704-62232b37a9720e349d2fa99a', // Hexo个人博客-Butterfly API key
     'm796898728-84b880951ab38555d1bdffa1', // Hexo个人博客-安知鱼 API key
-    'm797371122-43869aa8490a03a2841f3992', // ShowDoc 一个非常适合IT团队的API文档、技术文档工具 API key
     'm797287553-9e8e66f9568794e101f6b0dd', // memos一款隐私优先的轻量级笔记服务 API key
     'm796898733-6d12c54f9e46ab8c902a1f45', // Waline评论服务端 API key
     'm796905159-14864e22acaeb74c564f722b', // 静态资源网站 API key
